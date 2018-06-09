@@ -12,6 +12,13 @@ import java.util.ArrayList;
 
 public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.ExampleViewHolder >{
     private ArrayList<amoghjapps.com.worldymouldy.ExampleItem> myExampleList;
+    private OnItemClickListener myListener;
+    public interface OnItemClickListener{
+        void OnItemClick(int position);
+    }
+    public void setMyListener(OnItemClickListener listener){
+        myListener=listener;
+    }
     public static class ExampleViewHolder extends RecyclerView.ViewHolder{
         public TextView adaptvenue;
         public TextView adaptteam1;
@@ -20,7 +27,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
         public TextView adaptdateg;
         public ImageView adaptteam1i;
         public ImageView adaptteam2i;
-        public ExampleViewHolder(View itemView){
+        public ExampleViewHolder(View itemView, final OnItemClickListener listener){
             super(itemView);
             adaptvenue =itemView.findViewById(R.id.venue);
             adapttiming=itemView.findViewById(R.id.time);
@@ -29,6 +36,18 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
             adaptteam2=itemView.findViewById(R.id.team2name);
             adaptteam1i=itemView.findViewById(R.id.team1i);
             adaptteam2i=itemView.findViewById(R.id.team2i);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener !=null){
+                        int position=getAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION){
+                            listener.OnItemClick(position);
+                        }
+                    }
+                }
+            });
+
         }
 
 
@@ -42,7 +61,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
     @Override
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.exampleitem,parent,false);
-        ExampleViewHolder exampleViewHolder=new ExampleViewHolder(view);
+        ExampleViewHolder exampleViewHolder=new ExampleViewHolder(view,myListener);
         return exampleViewHolder;
     }
 
