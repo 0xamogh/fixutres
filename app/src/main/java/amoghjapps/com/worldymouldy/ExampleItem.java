@@ -1,18 +1,20 @@
 package amoghjapps.com.worldymouldy;
 
+import android.net.Uri;
 import android.widget.ImageView;
+import io.realm.RealmObject;
 
-public class ExampleItem {
+public class ExampleItem extends RealmObject {
 
     public String mvenue;
     public String mteam1;
     public String mteam2;
     public String mtiming;
     public String mdateg;
-    public int mteam1i;
-    public int mteam2i;
+    public Uri mteam1i;
+    public Uri mteam2i;
     public int mbgcolor;
-    public ExampleItem(String venue,String team1,String team2,String timing,String dateg,int team1i,int team2i,int bgcolor){
+    public ExampleItem(String venue,String team1,String team2,String timing,String dateg,Uri team1i,Uri team2i,int bgcolor){
         mteam1i=team1i;
         mteam2i=team2i;
         mteam2=team2;
@@ -24,11 +26,11 @@ public class ExampleItem {
 
     }
 
-    public int getMteam1i() {
+    public Uri getMteam1i() {
         return mteam1i;
     }
 
-    public int getMteam2i() {
+    public Uri getMteam2i() {
         return mteam2i;
     }
 

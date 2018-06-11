@@ -89,8 +89,8 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
 
 
 
-        holder.adaptteam2i.setImageResource(current.getMteam2i());
-        holder.adaptteam1i.setImageResource(current.getMteam1i());
+        holder.adaptteam2i.setImageURI(current.getMteam2i());
+        holder.adaptteam1i.setImageURI(current.getMteam1i());
         holder.adaptteam1.setText(current.getMteam1());
         holder.adaptteam2.setText(current.getMteam2());
         holder.adaptdateg.setText(current.getMdateg());

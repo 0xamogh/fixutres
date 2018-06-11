@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.text.UnicodeSetSpanner;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public Button remove;
     public Button refresh;
     public boolean itemselect=false;
+    private DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         final SharedPreferences sharedprefs= PreferenceManager.getDefaultSharedPreferences(this);
 
         final SharedPreferences.Editor editor= sharedprefs.edit();
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                exampleItems.add(new ExampleItem("Venue","Team1","Team2","Time","Date",R.mipmap.ic_launcher_round,R.mipmap.ic_launcher_round,Color.WHITE));
+                exampleItems.add(new ExampleItem("Venue","Team1","Team2","Time","Date",Uri.EMPTY,Uri.EMPTY,Color.WHITE));
                 adapt.notifyDataSetChanged();
             }
         });
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(Addition.running==false){
                     exampleItems.remove(sharedprefs.getInt("position",99));
-                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"),sharedprefs.getInt("team1i",0),sharedprefs.getInt("team2i",0), Color.WHITE));
+                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"), Uri.parse(sharedprefs.getString("team1i","")),Uri.parse(sharedprefs.getString("team2i","")), Color.WHITE));
                     adapt.notifyDataSetChanged();
                 }
 
@@ -103,7 +106,10 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("t2n", exampleItems.get(position).mteam2);
                     editor.putString("time", exampleItems.get(position).mtiming);
                     editor.putString("venue", exampleItems.get(position).mvenue);
-                    editor.commit();
+                    editor.putString("team1i",exampleItems.get(position).mteam1i.toString());
+                          editor.putString("team2i",exampleItems.get(position).mteam2i.toString());
+
+                          editor.commit();
 
                     startActivity(new Intent(MainActivity.this, Addition.class));
                 }
