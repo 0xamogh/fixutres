@@ -1,6 +1,8 @@
 package amoghjapps.com.worldymouldy;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
     private OnItemClickListener myListener;
     public interface OnItemClickListener{
         void OnItemClick(int position);
+        void onLongClick(int position);
     }
     public void setMyListener(OnItemClickListener listener){
         myListener=listener;
@@ -27,6 +30,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
         public TextView adaptdateg;
         public ImageView adaptteam1i;
         public ImageView adaptteam2i;
+        public ConstraintLayout layout;
         public ExampleViewHolder(View itemView, final OnItemClickListener listener){
             super(itemView);
             adaptvenue =itemView.findViewById(R.id.venue);
@@ -36,6 +40,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
             adaptteam2=itemView.findViewById(R.id.team2name);
             adaptteam1i=itemView.findViewById(R.id.team1i);
             adaptteam2i=itemView.findViewById(R.id.team2i);
+            layout=itemView.findViewById(R.id.layout);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -45,6 +50,19 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
                             listener.OnItemClick(position);
                         }
                     }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(listener !=null){
+                        int position=getAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION){
+                            listener.onLongClick(position);
+                        }
+                    }
+
+                    return false;
                 }
             });
 
@@ -78,7 +96,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
         holder.adaptdateg.setText(current.getMdateg());
         holder.adapttiming.setText(current.getMtiming());
         holder.adaptvenue.setText(current.getMvenue());
-
+        holder.layout.setBackgroundColor(current.getBG());
     }
 
     @Override

@@ -11,7 +11,8 @@ public class ExampleItem {
     public String mdateg;
     public int mteam1i;
     public int mteam2i;
-    public ExampleItem(String venue,String team1,String team2,String timing,String dateg,int team1i,int team2i){
+    public int mbgcolor;
+    public ExampleItem(String venue,String team1,String team2,String timing,String dateg,int team1i,int team2i,int bgcolor){
         mteam1i=team1i;
         mteam2i=team2i;
         mteam2=team2;
@@ -19,7 +20,7 @@ public class ExampleItem {
         mtiming=timing;
         mvenue=venue;
         mdateg=dateg;
-
+        mbgcolor=bgcolor;
 
     }
 
@@ -49,6 +50,13 @@ public class ExampleItem {
 
     public String getMvenue() {
         return mvenue;
+    }
+    public int getBG(){
+        return  mbgcolor;
+    }
+    public void setselectedBG(int color){
+        mbgcolor=color;
+
     }
 
 }

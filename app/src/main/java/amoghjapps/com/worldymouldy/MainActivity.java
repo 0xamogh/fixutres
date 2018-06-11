@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.icu.text.UnicodeSetSpanner;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,18 +20,21 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import amoghjapps.com.worldymouldy.ExampleItem;
-
+import amoghjapps.com.worldymouldy.Addition;
 public class MainActivity extends AppCompatActivity {
-    Button add;
-    ArrayList<ExampleItem> exampleItems=new ArrayList<>();
+    public Button add;
+    public ArrayList<ExampleItem> exampleItems=new ArrayList<>();
     private RecyclerView recycle;
     private ExampleAdapter adapt;
     private RecyclerView.LayoutManager laymanage;
     int count=0;//this variable detects if this instance is returning from the addition activity;
     public int posit;
+    public Button remove;
+    public Button refresh;
+    public boolean itemselect=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedprefs= PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences sharedprefs= PreferenceManager.getDefaultSharedPreferences(this);
 
         final SharedPreferences.Editor editor= sharedprefs.edit();
         super.onCreate(savedInstanceState);
@@ -41,46 +46,72 @@ public class MainActivity extends AppCompatActivity {
         adapt=new ExampleAdapter(exampleItems);
         recycle.setLayoutManager(laymanage);
         recycle.setAdapter(adapt);
-        if(count==0){
-        exampleItems.add(new ExampleItem("mum","barca","real mad","12:00","12/12/12",R.color.cardview_dark_background,R.color.cardview_dark_background));
-        exampleItems.add(new ExampleItem("g.","g","g,","g","gg,",R.color.cardview_shadow_end_color,R.color.cardview_dark_background));}
-        add.setOnClickListener(new View.OnClickListener() {
+        remove=findViewById(R.id.rmv);
+        refresh=findViewById(R.id.refresh);
+         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),String.valueOf(exampleItems.size()),Toast.LENGTH_LONG).show();
-                exampleItems.add(exampleItems.size(),new ExampleItem("Venue","Team1","Team2","Time","Date",R.color.cardview_dark_background,R.color.cardview_dark_background));
+
+                exampleItems.add(new ExampleItem("Venue","Team1","Team2","Time","Date",R.mipmap.ic_launcher_round,R.mipmap.ic_launcher_round,Color.WHITE));
+                adapt.notifyDataSetChanged();
             }
         });
-        if(count==0){
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Addition.running==false){
+                    exampleItems.remove(sharedprefs.getInt("position",99));
+                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"),R.mipmap.ic_launcher_round,R.mipmap.ic_launcher_round, Color.WHITE));
+                    adapt.notifyDataSetChanged();
+                }
+
+            }
+        });
+
         adapt.setMyListener(new ExampleAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(int position) {
-                posit=position;
-                exampleItems.get(position);
+            public void onLongClick(final int position) {
+                itemselect=true;
+                remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                editor.putString("t1n",exampleItems.get(position).mteam1);
-                editor.putInt("position",position);
-                editor.putString("date",exampleItems.get(position).mdateg);
-                editor.commit();
-
-                startActivity(new Intent(MainActivity.this,Addition.class));
-                count++;
-                editor.putInt("..",count);
-                editor.commit();
-                finish();
+                        exampleItems.remove(position);
+                        adapt.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(),"Item has been removed", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
+            @Override
+            public void OnItemClick(int position) {
+                      posit = position;
 
-        });}
+                      if(itemselect==true){
 
-        if(sharedprefs.getInt("..",0)==1){
+                            exampleItems.get(position).setselectedBG(Color.CYAN);
+                             adapt.notifyItemChanged(position);
 
-            exampleItems.remove(sharedprefs.getInt("position",0));
-            exampleItems.add(sharedprefs.getInt("position",0), new ExampleItem(sharedprefs.getString("venue",""),sharedprefs.getString("t1n",""),sharedprefs.getString("t2n",""),sharedprefs.getString("time",""),sharedprefs.getString("date",""),R.color.cardview_dark_background,R.color.cardview_dark_background));
-            count=0;
-            editor.putInt("..",count);
-            editor.commit();
-        }
+                          Toast.makeText(getApplicationContext(),"Item has been selected",Toast.LENGTH_LONG).show();
+                        itemselect=false;
+
+                      }else {
+
+                    editor.putString("t1n", exampleItems.get(position).mteam1);
+                    editor.putInt("position", position);
+                    editor.putString("date", exampleItems.get(position).mdateg);
+                    editor.putString("t2n", exampleItems.get(position).mteam2);
+                    editor.putString("time", exampleItems.get(position).mtiming);
+                    editor.putString("venue", exampleItems.get(position).mvenue);
+                    editor.commit();
+
+                    startActivity(new Intent(MainActivity.this, Addition.class));
+                }
+
+            }});
+
+
+
 
     }
 }
