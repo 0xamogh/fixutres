@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(Addition.running==false){
                     exampleItems.remove(sharedprefs.getInt("position",99));
-                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"),R.mipmap.ic_launcher_round,R.mipmap.ic_launcher_round, Color.WHITE));
+                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"),sharedprefs.getInt("team1i",0),sharedprefs.getInt("team2i",0), Color.WHITE));
                     adapt.notifyDataSetChanged();
                 }
 
