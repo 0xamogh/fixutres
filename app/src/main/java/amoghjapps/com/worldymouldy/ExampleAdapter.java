@@ -59,6 +59,7 @@ public class ExampleAdapter extends RecyclerView.Adapter <ExampleAdapter.Example
                         int position=getAdapterPosition();
                         if(position!=RecyclerView.NO_POSITION){
                             listener.onLongClick(position);
+
                         }
                     }
 

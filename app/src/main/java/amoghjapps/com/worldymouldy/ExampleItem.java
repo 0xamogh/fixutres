@@ -2,9 +2,8 @@ package amoghjapps.com.worldymouldy;
 
 import android.net.Uri;
 import android.widget.ImageView;
-import io.realm.RealmObject;
 
-public class ExampleItem extends RealmObject {
+public class ExampleItem {
 
     public String mvenue;
     public String mteam1;

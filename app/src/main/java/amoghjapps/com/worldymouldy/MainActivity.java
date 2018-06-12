@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.text.UnicodeSetSpanner;
+import android.media.AudioAttributes;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,12 +35,14 @@ public class MainActivity extends AppCompatActivity {
     public Button remove;
     public Button refresh;
     public boolean itemselect=false;
+    Uri t1i,t2i;
     private DatabaseHelper databaseHelper;
+    public Vibrator vib;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         final SharedPreferences sharedprefs= PreferenceManager.getDefaultSharedPreferences(this);
-
+        vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         final SharedPreferences.Editor editor= sharedprefs.edit();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -64,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(Addition.running==false){
                     exampleItems.remove(sharedprefs.getInt("position",99));
-                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"), Uri.parse(sharedprefs.getString("team1i","")),Uri.parse(sharedprefs.getString("team2i","")), Color.WHITE));
+                    t1i=Uri.parse(sharedprefs.getString("team1i"," "));
+                    t2i=Uri.parse(sharedprefs.getString("team2i"," "));
+
+                    exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"), t1i,t2i, Color.WHITE));
                     adapt.notifyDataSetChanged();
                 }
 
@@ -94,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
                             exampleItems.get(position).setselectedBG(Color.CYAN);
                              adapt.notifyItemChanged(position);
+                             vib.vibrate(70);
+
 
                           Toast.makeText(getApplicationContext(),"Item has been selected",Toast.LENGTH_LONG).show();
                         itemselect=false;

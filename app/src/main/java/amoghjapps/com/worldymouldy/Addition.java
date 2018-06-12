@@ -11,12 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Addition extends AppCompatActivity {
     TextView t1n,t2n,time,date,venue;
     Button button,button2;
     ImageView t1i,t2i;
-    String t2is,t1is;
+    public String t2is,t1is;
     static boolean running;
     public int imagepick;
     public static int PICK_IMAGE=100;
@@ -50,8 +51,8 @@ public class Addition extends AppCompatActivity {
         time.setText(sharedprefs.getString("time",""));
         venue.setText(sharedprefs.getString("venue",""));
         date.setText(sharedprefs.getString("date","not working"));
-        t1i.setImageURI(Uri.parse(sharedprefs.getString("team1i","")));
-        t2i.setImageURI(Uri.parse(sharedprefs.getString("team2i","")));
+        t1i.setImageURI(Uri.parse(sharedprefs.getString("team1i"," ")));
+        t2i.setImageURI(Uri.parse(sharedprefs.getString("team2i"," ")));
 
         t1i.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,9 +83,7 @@ public class Addition extends AppCompatActivity {
                 editor.putString("venue",venue.getText().toString());
                 editor.putString("team1i",t1is);
                 editor.putString("team2i",t2is);
-
                 editor.commit();
-
                 finish();
             }
         });
@@ -103,6 +102,7 @@ public class Addition extends AppCompatActivity {
             if(imagepick==2){
         t2i.setImageURI(data.getData());
         t2is=data.getData().toString();
+                Toast.makeText(getApplicationContext(),"penis",Toast.LENGTH_LONG).show();
 
         }else if(imagepick==1){
             t1i.setImageURI(data.getData());
