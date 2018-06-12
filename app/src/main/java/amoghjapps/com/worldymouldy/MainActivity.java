@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        //
                         exampleItems.remove(position);
                         adapt.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(),"Item has been removed", Toast.LENGTH_LONG).show();
