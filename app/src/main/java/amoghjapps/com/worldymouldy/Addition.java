@@ -102,7 +102,7 @@ public class Addition extends AppCompatActivity {
             if(imagepick==2){
         t2i.setImageURI(data.getData());
         t2is=data.getData().toString();
-                Toast.makeText(getApplicationContext(),"penis",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"works",Toast.LENGTH_LONG).show();
 
         }else if(imagepick==1){
             t1i.setImageURI(data.getData());
