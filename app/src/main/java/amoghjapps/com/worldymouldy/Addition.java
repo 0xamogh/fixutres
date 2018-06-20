@@ -1,8 +1,11 @@
 package amoghjapps.com.worldymouldy;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +24,7 @@ public class Addition extends AppCompatActivity {
     static boolean running;
     public int imagepick;
     public static int PICK_IMAGE=100;
+    AppDatabase db;
     @Override
         public void onStart(){
         super.onStart();
@@ -53,13 +57,15 @@ public class Addition extends AppCompatActivity {
         date.setText(sharedprefs.getString("date","not working"));
         t1i.setImageURI(Uri.parse(sharedprefs.getString("team1i"," ")));
         t2i.setImageURI(Uri.parse(sharedprefs.getString("team2i"," ")));
-
+        db= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"production").build();
+        final AppDatabase db =Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"production").build();
         t1i.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 imagepick=1;
                 chooseImg();
+
 
             }
         });
@@ -82,8 +88,18 @@ public class Addition extends AppCompatActivity {
                 editor.putString("time",time.getText().toString());
                 editor.putString("venue",venue.getText().toString());
                 editor.putString("team1i",t1is);
+                Toast.makeText(getApplicationContext(),t1is,Toast.LENGTH_LONG).show();
                 editor.putString("team2i",t2is);
                 editor.commit();
+                final ExampleItem exampleItem=new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"), Uri.parse(t1is),Uri.parse(t2is), Color.WHITE);
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        db.databaseInterf().insertAll(exampleItem);
+                    }
+                });
+                Intent i= new Intent(Addition.this,MainActivity.class);
+                startActivity(i);
                 finish();
             }
         });

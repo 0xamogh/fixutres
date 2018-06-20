@@ -1,5 +1,6 @@
 package amoghjapps.com.worldymouldy;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.icu.text.UnicodeSetSpanner;
 import android.media.AudioAttributes;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     public Button refresh;
     public boolean itemselect=false;
     Uri t1i,t2i;
-    private DatabaseHelper databaseHelper;
     public Vibrator vib;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
         recycle.setAdapter(adapt);
         remove=findViewById(R.id.rmv);
         refresh=findViewById(R.id.refresh);
+        final AppDatabase db= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"production").build();
+        Runnable run =new Runnable() {
+            @Override
+            public void run() {
+                exampleItems= db.databaseInterf().getAllItems();
+                recycle.setLayoutManager(new LinearLayoutManager(getApplication()));
+                adapt=new ExampleAdapter(exampleItems);
+            }
+        };
+        Thread newThread=new Thread(run);
+        newThread.start();
          add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
                     exampleItems.add(sharedprefs.getInt("position",99),new ExampleItem(sharedprefs.getString("venue","-"),sharedprefs.getString("t1n","-"),sharedprefs.getString("t2n","-"),sharedprefs.getString("time","-"),sharedprefs.getString("date","-"), t1i,t2i, Color.WHITE));
                     adapt.notifyDataSetChanged();
+
                 }
 
             }
@@ -121,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                           editor.commit();
 
                     startActivity(new Intent(MainActivity.this, Addition.class));
+                    finish();
                 }
 
             }});
