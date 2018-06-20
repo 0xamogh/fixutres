@@ -29,7 +29,7 @@ public class ExampleItem {
     @ColumnInfo(name = "color")
     public int mbgcolor;
 
-    public ExampleItem(String venue,String team1,String team2,String timing,String dateg,Uri team1i,Uri team2i,int bgcolor){
+    public ExampleItem(String venue,String team1,String team2,String timing,String dateg, Uri team1i,Uri team2i,int bgcolor){
         mteam1i=team1i;
         mteam2i=team2i;
         mteam2=team2;
